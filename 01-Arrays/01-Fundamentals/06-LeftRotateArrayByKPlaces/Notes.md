@@ -3,30 +3,42 @@
 - Pattern: Array reversal
 - Time Complexity: O(n)
 - Space Complexity: O(1)
-- Recall: Move the first k elements to the end
-- Fast recognition: Reverse all -> reverse first k -> reverse the rest
+- This problem asks for a left rotation: move the first `k` elements to the end.
+- Fast recognition: Left = reverse first part -> reverse second part -> reverse whole array.
 
 ## Why use `k % n`?
 
-- `n` is the number of elements in the array; `k` is how many positions to rotate.
-- After `n` rotations, the array returns to its original order. Full groups of `n` rotations do not change the final result.
-- So `k % n` keeps only the rotations that still have an effect.
+- `n` is the number of elements; `k` is the number of requested rotations.
+- Every `n` rotations bring the array back to its original order, so only the remainder changes it.
 
-Example with 5 elements:
+Example: `n = 6`, `k = 8` means `8 % 6 = 2`. Rotating 8 times has the same result as rotating 2 times.
 
-| Given k | Calculation | Effective rotations |
-|---------|-------------|---------------------|
-| 7 | 7 % 5 | 2 |
-| 10 | 10 % 5 | 0 |
+## Left rotation with `k = 2`
 
-For `k = 7`, think of 5 rotations returning the array to its start, then 2 more rotations. Only those 2 extra rotations matter.
+Start: `[1, 2, 3, 4, 5, 6]`
 
-## Three reversals for a left rotation
+Goal: `[3, 4, 5, 6, 1, 2]`
 
-For `[1, 2, 3, 4, 5]` with `k = 2`, the goal is `[3, 4, 5, 1, 2]`:
+1. Reverse the first `k` elements: `[2, 1, 3, 4, 5, 6]`
+2. Reverse the remaining elements: `[2, 1, 6, 5, 4, 3]`
+3. Reverse the whole array: `[3, 4, 5, 6, 1, 2]`
 
-1. Reverse the first `k` elements: `[2, 1, 3, 4, 5]`
-2. Reverse the remaining elements: `[2, 1, 5, 4, 3]`
-3. Reverse the whole array: `[3, 4, 5, 1, 2]`
+Code call order:
 
-Important: the current reversal call order in `code.py` reverses the whole array first, so it performs a **right rotation**. For this problem's left rotation, use the three steps above.
+```python
+reverseList(0, k - 1)  # reverse first k elements
+reverseList(k, n - 1)  # reverse remaining elements
+reverseList(0, n - 1)  # reverse the whole array
+```
+
+## Right rotation pattern
+
+Right rotation moves the last `k` elements to the beginning.
+
+Start: `[1, 2, 3, 4, 5, 6]`, `k = 2`
+
+1. Reverse the whole array: `[6, 5, 4, 3, 2, 1]`
+2. Reverse the first `k` elements: `[5, 6, 4, 3, 2, 1]`
+3. Reverse the remaining elements: `[5, 6, 1, 2, 3, 4]`
+
+Fast recognition: Right = reverse whole array -> reverse first `k` -> reverse the rest.
